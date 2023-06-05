@@ -19,9 +19,11 @@ class CustomerController extends Controller
         $this->customerImportService = new CustomerImportService();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::query()->paginate(15);
+        $customers = Customer::query()
+            ->filter($request)
+            ->paginate(15);
 
         return view('customer.index', compact('customers'));
     }
@@ -35,7 +37,7 @@ class CustomerController extends Controller
 
     public function export()
     {
-        $customers = Customer::query()->paginate(15);
+        $customers = Customer::query()->paginate(10 );
 
         return $this->customerExportService->export($customers);
     }

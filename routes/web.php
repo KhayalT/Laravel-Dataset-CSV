@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [CustomerController::class, 'index']);
+Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
 
 Route::group(['prefix' => 'customer'], function (){
     Route::post('/import', [CustomerController::class, 'import'])->name('import.customer');

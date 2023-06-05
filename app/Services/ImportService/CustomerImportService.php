@@ -11,11 +11,6 @@ class CustomerImportService
 {
     const HEADINGS = ['category', 'firstname', 'lastname', 'email', 'gender', 'birthday'];
 
-    public function getFileName(): string
-    {
-        return 'customers'.time().'.csv';
-    }
-
     /**
      * @param $file
      * @return RedirectResponse

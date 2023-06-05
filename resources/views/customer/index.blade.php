@@ -35,6 +35,32 @@
                     </form>
                 </div>
             </div>
+            <form action="{{route('customer.index')}}" method="GET">
+                <div class="m-4 d-flex justify-content-evenly">
+                    <div class="w-25">
+                        <label>Category</label>
+                        <input type="text" name="category" value="{{request()->get('category')}}" aria-label="category" class="form-control w-100" />
+                    </div>
+                    <div class=" w-25">
+                        <label>Gender</label>
+                        <select name="gender" aria-label="gender"  class="form-control w-100" >
+                            <option value="">Choose</option>
+                            <option value="male" @if(request()->get('gender') == 'male') selected @endif>Male</option>
+                            <option value="female" @if(request()->get('gender') == 'female') selected @endif>Female</option>
+                        </select>
+                    </div>
+                    <div class="w-25">
+                        <label>Birthdate</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="text" name="range_start" aria-label="birthdate" class="form-control w-50" min="1" max="100" value="{{request()->get('range_start')}}"  />
+                            <input type="text" name="range_end" aria-label="birthdate" class="form-control w-50 ml-2" min="1" max="100"  value="{{request()->get('range_end')}}" />
+                        </div>
+                    </div>
+                    <div class="w-10">
+                        <button class="btn btn-success mt-4">Search</button>
+                    </div>
+                </div>
+            </form>
             <div>
               <table class="table table-dark py-4">
                 <thead>
@@ -62,8 +88,8 @@
                 @endforeach
                 </tbody>
             </table>
+             {{$customers->links()}}
             </div>
         </div>
-        {{$customers->links()}}
     </body>
 </html>
