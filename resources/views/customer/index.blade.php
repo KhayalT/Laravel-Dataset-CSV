@@ -20,11 +20,20 @@
     <body class="m-3">
         <div class="justify-center">
             <div class="mt-3 mb-1 d-flex justify-content-between">
-                <form method="post" action="{{route('export.customer')}}">
-                    @csrf
-                    <button class="btn btn-warning text-white">Export</button>
-                </form>
-                <button class="btn btn-info text-white">Import</button>
+                <div>
+                    <form method="post" action="{{route('export.customer')}}">
+                        @csrf
+                        <button class="btn btn-warning text-white">Export</button>
+                    </form>
+                </div>
+
+                <div>
+                    <form action="{{ route('import.customer') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="customers" />
+                        <button class="btn btn-info text-white">Import</button>
+                    </form>
+                </div>
             </div>
             <div>
               <table class="table table-dark py-4">
@@ -48,12 +57,13 @@
                         <td>{{$customer->lastname}}</td>
                         <td>{{$customer->email}}</td>
                         <td>{{$customer->gender}}</td>
-                        <td>{{$customer->birthdate}}</td>
+                        <td>{{date('Y-m-d', strtotime($customer->birthDate))}}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
             </div>
         </div>
+        {{$customers->links()}}
     </body>
 </html>

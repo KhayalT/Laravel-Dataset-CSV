@@ -9,7 +9,9 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category', 'firstname', 'lastname', 'email', 'gender', 'birthday'];
+    protected $fillable = ['category', 'firstname', 'lastname', 'email', 'gender', 'birthDate'];
 
-    protected $dates = ['birthday'];
+    protected $dates = ['birthDate'];
+
+
 }

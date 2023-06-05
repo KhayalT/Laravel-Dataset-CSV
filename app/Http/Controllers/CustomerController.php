@@ -3,16 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Services\ExportService\CustomerExportService;
+use App\Services\ImportService\CustomerImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CustomerController extends Controller
 {
+    private $customerExportService;
+    private $customerImportService;
+
+    public function __construct()
+    {
+        $this->customerExportService = new CustomerExportService();
+        $this->customerImportService = new CustomerImportService();
+    }
+
     public function index()
     {
-        $customers = Customer::query()->get();
+        $customers = Customer::query()->paginate(15);
+
         return view('customer.index', compact('customers'));
     }
 
@@ -20,50 +30,13 @@ class CustomerController extends Controller
     {
         $file = $request->file('customers');
 
-        if ($file->isValid()) {
-            $handle = fopen($file->getRealPath(), 'r');
-
-            $headerRow = true;
-
-            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
-                if ($headerRow) {
-                    $headerRow = false;
-                    continue;
-                }
-                $data['id'] = 1;
-            }
-
-            fclose($handle);
-
-            return redirect()->back()->with('success', 'Imported successfully.');
-        }
-
-        return redirect()->back()->with('error', 'Some problem occurred.');
+        return $this->customerImportService->import($file);
     }
 
-    public function export(): StreamedResponse
+    public function export()
     {
-        $data = Customer::query()->get();
+        $customers = Customer::query()->paginate(15);
 
-        $fileName = 'customers.csv';
-
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-        ];
-
-        $callback = function () use ($data) {
-            $file = fopen('php://output', 'w');
-
-            fputcsv($file, ['category', 'firstname', 'lastname', 'email', 'gender', 'birthday']);
-
-            foreach ($data as $row) {
-                fputcsv($file, $row);
-            }
-
-            fclose($file);
-        };
-
-        return Response::stream($callback, 200, $headers);
+        return $this->customerExportService->export($customers);
     }
 }

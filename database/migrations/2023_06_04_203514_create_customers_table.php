@@ -20,7 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('lastname');
             $table->string('email')->unique();
             $table->enum('gender', ['male', 'female']);
-            $table->date('birthdate');
+            $table->date('birthDate');
             $table->timestamps();
         });
     }
