@@ -15,6 +15,10 @@ class Customer extends Model
 
     protected $dates = ['birthDate'];
 
+    protected $casts = ['birthDate' => 'date:Y-m-d'];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function scopeFilter(Builder $query, $filters)
     {
         $query

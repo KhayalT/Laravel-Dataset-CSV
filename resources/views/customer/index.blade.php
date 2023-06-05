@@ -21,7 +21,7 @@
         <div class="justify-center">
             <div class="mt-3 mb-1 d-flex justify-content-between">
                 <div>
-                    <form method="post" action="{{route('export.customer')}}">
+                    <form method="post" action="{{route('export.customer', request()->all())}}">
                         @csrf
                         <button class="btn btn-warning text-white">Export</button>
                     </form>

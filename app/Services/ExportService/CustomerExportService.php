@@ -3,13 +3,12 @@
 
 namespace App\Services\ExportService;
 
-use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class CustomerExportService
 {
-    const HEADINGS = ['category', 'firstname', 'lastname', 'email', 'gender', 'birthday'];
+    const HEADINGS = ['id', 'category', 'firstname', 'lastname', 'email', 'gender', 'birthDate'];
 
     public function getFileName(): string
     {
@@ -27,19 +26,19 @@ class CustomerExportService
                 'Content-Disposition' => 'attachment; filename="' . $this->getFileName() . '"',
             ];
 
-            $callback = function () use ($data) {
+             $callback = function () use ($data) {
                 $file = fopen('php://output', 'w');
 
                 fputcsv($file, self::HEADINGS);
 
                 foreach ($data as $row) {
-                    fputcsv($file, $row);
+                    fputcsv($file, $row->toArray());
                 }
 
                 fclose($file);
             };
 
-            return Response::stream($callback, 200, $headers);
+            return response()->stream($callback, 200, $headers);
         } catch (Throwable $th) {
             echo $th->getMessage();
         }

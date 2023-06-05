@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\User;
 use App\Services\ExportService\CustomerExportService;
 use App\Services\ImportService\CustomerImportService;
 use Illuminate\Http\RedirectResponse;
@@ -35,9 +36,11 @@ class CustomerController extends Controller
         return $this->customerImportService->import($file);
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        $customers = Customer::query()->paginate(10 );
+        ini_set('memory_limit', '256M');
+
+        $customers = Customer::query()->filter($request)->get();
 
         return $this->customerExportService->export($customers);
     }
