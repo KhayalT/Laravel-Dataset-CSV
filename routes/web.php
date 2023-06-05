@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [CustomerController::class, 'index']);
+
+Route::group(['prefix' => 'customer'], function (){
+    Route::post('/import', [CustomerController::class, 'import'])->name('import.customer');
+    Route::post('/export', [CustomerController::class, 'export'])->name('export.customer');
 });
